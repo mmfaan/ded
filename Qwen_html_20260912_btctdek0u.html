@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="سبكترا">
+<meta name="theme-color" content="#05080A">
+<title>سبكترا‑٧ | معترض الإشارات — نسخة آيفون</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Changa:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05080A; --panel:#0C171C; --panel2:#101F26; --line:#1B3941; --line2:#2A5560;
+  --grn:#53F28E; --grn-d:#2F9E60; --amb:#FFB454; --red:#FF5C5C; --cyn:#5BD6E8;
+  --txt:#D9E9E5; --mut:#7FA3A6;
+  --disp:'Changa',sans-serif; --body:'IBM Plex Sans Arabic',sans-serif; --mono:'Share Tech Mono',monospace;
+  --tabbar:calc(58px + env(safe-area-inset-bottom));
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{height:100%}
+body{
+  min-height:100vh;min-height:100dvh;background:var(--bg);color:var(--txt);
+  font-family:var(--body);font-size:15px;overscroll-behavior:none;
+  padding-top:env(safe-area-inset-top);padding-bottom:var(--tabbar);
+  -webkit-user-select:none;user-select:none;touch-action:manipulation;
+}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(600px 400px at 85% -5%, rgba(14,42,42,.5), transparent 60%),
+    radial-gradient(500px 380px at 5% 108%, rgba(10,36,48,.45), transparent 60%),
+    linear-gradient(rgba(90,220,180,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90,220,180,.035) 1px, transparent 1px);
+  background-size:auto,auto,42px 42px,42px 42px;}
+::selection{background:var(--grn);color:#04110A}
+input,select,textarea{-webkit-user-select:text;user-select:text;font-size:16px}
+
+/* ── شاشة التفعيل ── */
+#gate{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 30%, #0A181D, #030607 75%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:26px;text-align:center;transition:opacity .6s}
+.g-logo{font-family:var(--disp);font-weight:800;font-size:44px;color:#EAFBF1;text-shadow:0 0 30px rgba(83,242,142,.5);letter-spacing:1px}
+.g-sub{color:var(--mut);font-size:14px;margin-bottom:22px}
+.g-sub b{color:var(--grn)}
+#gBtn{width:132px;height:132px;border-radius:50%;border:2px solid var(--grn-d);cursor:pointer;
+  background:radial-gradient(circle at 38% 32%, #16353D, #08151A);display:grid;place-items:center;
+  box-shadow:0 0 0 0 rgba(83,242,142,.4);animation:ring 2.2s ease-out infinite;transition:transform .15s}
+#gBtn:active{transform:scale(.93)}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(83,242,142,.45)}100%{box-shadow:0 0 0 34px rgba(83,242,142,0)}}
+#gList{margin-top:26px;width:100%;max-width:340px;display:flex;flex-direction:column;gap:8px}
+.g-row{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border:1px solid var(--line);
+  border-radius:10px;background:#0A1418;font-size:13.5px;color:var(--mut);transition:.3s}
+.g-row i{font-style:normal;font-family:var(--mono);font-size:14px;color:var(--mut)}
+.g-row.ok{border-color:var(--grn-d);color:var(--txt)} .g-row.ok i{color:var(--grn)}
+.g-row.no{border-color:#5A2626} .g-row.no i{color:var(--red)}
+.g-note{margin-top:18px;font-size:11.5px;color:#4E6B6B;max-width:320px;line-height:1.9}
+
+/* ── الشريط العلوي ── */
+header{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;background:rgba(6,12,15,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line)}
+.hbrand{display:flex;align-items:center;gap:9px}
+.hbrand svg{filter:drop-shadow(0 0 5px rgba(83,242,142,.6))}
+.hbrand b{font-family:var(--disp);font-weight:800;font-size:17px;color:#EAFBF1}
+.hbrand small{font-size:9.5px;color:var(--mut);display:block;margin-top:-3px;letter-spacing:.5px}
+.leds{display:flex;gap:12px}
+.led{display:flex;flex-direction:column;align-items:center;gap:3px;font-family:var(--mono);font-size:8px;color:#4E6B6B;letter-spacing:1px}
+.led i{width:9px;height:9px;border-radius:50%;background:#12333B;border:1px solid var(--line2);transition:.3s}
+.led.on i{background:var(--grn);box-shadow:0 0 8px var(--grn)}
+.led.cy i{background:var(--cyn);box-shadow:0 0 8px var(--cyn)}
+.led.rd i{background:var(--red);box-shadow:0 0 8px var(--red)}
+.led.on i{animation:pl 2.4s infinite}
+@keyframes pl{50%{opacity:.5}}
+.clock{font-family:var(--mono);font-size:14px;color:var(--grn);text-shadow:0 0 10px rgba(83,242,142,.4);letter-spacing:1px}
+.clock small{display:block;font-size:8px;color:#4E6B6B;text-align:center;letter-spacing:2px}
+
+main{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:14px 14px 20px}
+section{display:none}
+section.active{display:block;animation:pin .4s ease}
+@keyframes pin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.ph{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:6px 0 14px}
+.ph h2{font-family:var(--disp);font-weight:700;font-size:19px;color:#EAFBF1}
+.ph h2 em{font-style:normal;font-size:11px;color:var(--mut);display:block;font-family:var(--body);font-weight:400;margin-top:2px}
+.chipst{font-family:var(--mono);font-size:10.5px;letter-spacing:1px;padding:6px 12px;border-radius:16px;border:1px solid var(--line2);color:var(--mut);white-space:nowrap;transition:.3s}
+.chipst.live{color:#04110A;background:var(--grn);border-color:var(--grn);box-shadow:0 0 14px rgba(83,242,142,.5);animation:pl 1.8s infinite}
+.chipst.err{color:var(--red);border-color:var(--red)}
+
+.card{border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,var(--panel2),var(--panel));
+  padding:16px;margin-bottom:14px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
+.note{font-size:12px;color:var(--mut);line-height:1.9;border-inline-start:3px solid var(--line2);padding-inline-start:11px;margin-top:4px}
+.note b{color:var(--grn)}
+
+.btn{font-family:var(--disp);font-weight:700;font-size:14.5px;color:var(--txt);cursor:pointer;border-radius:12px;
+  min-height:48px;padding:10px 18px;border:1px solid var(--line2);
+  background:linear-gradient(180deg,#15303A,#0C1C23);display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.15s}
+.btn:active{transform:scale(.96);background:#0A161B}
+.btn.prime{background:linear-gradient(180deg,#1E5B3C,#103624);border-color:var(--grn-d);color:#C9FFDD}
+.btn.red{background:linear-gradient(180deg,#5B2020,#361010);border-color:#7A2F2F;color:#FFD6D6}
+.btn.wide{width:100%}
+.btn:disabled{opacity:.35}
+
+.scope{position:relative;height:230px;border-radius:14px;overflow:hidden;border:1px solid var(--line2);
+  background:radial-gradient(ellipse at 50% 130%, #0A1E1E, #05090C 75%)}
+.scope canvas{position:absolute;inset:0;width:100%;height:100%}
+.scope::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.15) 0 1px,transparent 1px 3px)}
+.hud{position:absolute;top:10px;inset-inline-start:12px;z-index:3;pointer-events:none}
+.hud .fb{font-family:var(--mono);font-size:26px;color:var(--grn);text-shadow:0 0 14px rgba(83,242,142,.6);line-height:1}
+.hud .fs{font-size:10px;color:var(--mut);margin-top:3px}
+.hud .fd{font-family:var(--mono);font-size:12px;color:var(--amb);margin-top:4px}
+.overlay{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(4,9,11,.78);backdrop-filter:blur(3px)}
+.overlay p{font-size:12px;color:var(--mut);max-width:280px;text-align:center;line-height:1.8;padding:0 12px}
+.roundbtn{width:96px;height:96px;border-radius:50%;border:2px solid var(--grn-d);cursor:pointer;font-family:var(--disp);font-weight:800;font-size:16px;color:#C9FFDD;
+  background:radial-gradient(circle at 38% 32%,#1E5B3C,#0D2A1B);box-shadow:0 0 26px rgba(83,242,142,.35);transition:transform .15s}
+.roundbtn:active{transform:scale(.92)}
+.fall{position:relative;height:120px;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin-top:10px;background:#04090C}
+.fall canvas{position:absolute;inset:0;width:100%;height:100%}
+.fall span{position:absolute;top:6px;inset-inline-end:10px;font-family:var(--mono);font-size:9px;color:rgba(139,227,180,.5);letter-spacing:2px;z-index:2}
+.meter{margin-top:12px}
+.meter .bar{height:12px;border-radius:6px;background:#071014;border:1px solid var(--line);overflow:hidden}
+.meter .fill{height:100%;width:0%;background:linear-gradient(90deg,var(--grn-d),var(--grn) 55%,var(--amb) 80%,var(--red));transition:width .12s}
+.meter .lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9.5px;color:#4E6B6B;margin-top:4px}
+.reads{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--mut);margin-top:12px;flex-wrap:wrap;gap:6px}
+.reads b{color:var(--cyn);font-weight:400}
+.ctrl{display:flex;flex-direction:column;gap:4px;margin-top:14px}
+.ctrl label{display:flex;justify-content:space-between;font-size:12px;color:var(--mut)}
+.ctrl label b{font-family:var(--mono);color:var(--grn);font-weight:400}
+input[type=range]{width:100%;height:34px;accent-color:var(--grn)}
+.tgrow{display:flex;gap:10px;margin-top:14px;align-items:center;flex-wrap:wrap}
+.tgl{display:flex;align-items:center;gap:8px;font-size:13px;min-height:44px}
+.tgl input{width:22px;height:22px;accent-color:var(--grn)}
+.btnrow{display:flex;gap:10px;margin-top:14px}
+.btnrow .btn{flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{font-family:var(--mono);font-size:12px;color:var(--grn);background:#0A1E16;border:1px solid var(--grn-d);
+  border-radius:18px;padding:8px 14px;transition:.15s}
+.chip:active{background:var(--grn);color:#04110A}
+.chip .db{color:var(--amb)}
+#micMsg{font-family:var(--mono);font-size:11px;color:var(--red);min-height:16px;text-align:center}
+
+.bigfreq{text-align:center;padding:6px 0 2px}
+.bigfreq .v{font-family:var(--mono);font-size:44px;color:var(--grn);text-shadow:0 0 22px rgba(83,242,142,.55);line-height:1}
+.bigfreq .c{font-size:12px;color:var(--amb);margin-top:6px}
+.bigfreq .t{font-size:10.5px;color:var(--mut);margin-top:2px}
+.dialwrap{display:flex;justify-content:center;padding:6px 0}
+.headwrap{text-align:center;margin-top:4px}
+.headwrap .h{font-family:var(--disp);font-weight:800;font-size:46px;color:#EAFBF1;line-height:1}
+.headwrap .h small{font-size:20px;color:var(--mut);font-weight:500}
+.headwrap .d{font-size:12.5px;color:var(--cyn);margin-top:4px}
+.lvrow{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:14px;flex-wrap:wrap}
+.lvlab{font-family:var(--mono);font-size:10.5px;color:var(--mut);line-height:2;text-align:center}
+.lvlab b{color:var(--cyn);font-weight:400;display:block;font-size:13px}
+.infogrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.info{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#0A1418}
+.info dt{font-size:10px;color:var(--mut)}
+.info dd{font-family:var(--mono);font-size:13px;color:var(--grn);margin-top:2px}
+
+.searchrow{display:flex;gap:8px}
+.searchrow input{flex:1;background:#08141A;border:1px solid var(--line2);color:var(--txt);border-radius:12px;padding:0 14px;height:48px;outline:none}
+.searchrow input:focus{border-color:var(--grn-d)}
+.iconb{width:48px;height:48px;flex:none;border-radius:12px;border:1px solid var(--line2);background:#0C1C23;color:var(--txt);font-size:19px;cursor:pointer}
+.iconb:active{transform:scale(.93)}
+.tagrow{display:flex;gap:7px;overflow-x:auto;padding:12px 0 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tagrow::-webkit-scrollbar{display:none}
+.tagc{flex:none;font-size:12.5px;padding:9px 16px;border-radius:18px;border:1px solid var(--line);background:#08141A;color:var(--mut)}
+.tagc.active{color:var(--grn);border-color:var(--grn-d);background:#0A1E16}
+.st{display:flex;gap:12px;align-items:center;cursor:pointer}
+.st .fav{width:46px;height:46px;flex:none;border-radius:10px;background:#0A222B;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden;font-family:var(--disp);font-weight:700;font-size:20px;color:var(--grn)}
+.st .fav img{width:100%;height:100%;object-fit:cover}
+.st h3{font-size:14px;font-weight:700;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
+.st .meta{font-family:var(--mono);font-size:10px;color:var(--mut);margin-top:3px}
+.st .eq{display:none;gap:2px;align-items:flex-end;height:16px;margin-inline-start:auto;flex:none}
+.st.playing{border-color:var(--amb);box-shadow:0 0 20px rgba(255,180,84,.15)}
+.st.playing .eq{display:flex}
+.eq i{width:3px;background:var(--amb);border-radius:2px;animation:eq .7s ease-in-out infinite}
+.eq i:nth-child(2){animation-delay:.15s}.eq i:nth-child(3){animation-delay:.3s}.eq i:nth-child(4){animation-delay:.45s}
+@keyframes eq{0%,100%{height:4px}50%{height:16px}}
+.player{position:sticky;bottom:calc(var(--tabbar) + 10px);display:none;gap:10px;align-items:center;
+  background:linear-gradient(180deg,#143842,#0B2028);border:1px solid var(--line2);border-radius:14px;padding:12px 14px;margin-top:12px;
+  box-shadow:0 -8px 30px rgba(0,0,0,.55);z-index:30}
+.player.show{display:flex}
+.player .now{flex:1;min-width:0}
+.player .now b{display:block;font-size:13.5px;color:#FFF3E0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player .now span{font-family:var(--mono);font-size:9.5px;color:var(--amb)}
+.liveb{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--red)}
+.liveb i{width:7px;height:7px;border-radius:50%;background:var(--red);animation:pl 1s infinite}
+.player input[type=range]{width:70px}
+.speedbox{display:none;margin-top:12px}
+.speedbox.show{display:block;animation:pin .3s}
+.speedbox .r{font-size:14px;line-height:2}
+.speedbox .r b{font-family:var(--mono);color:var(--grn);font-size:19px}
+.speedbox .s{font-size:11.5px;color:var(--mut)}
+
+.chain{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:14px}
+.chain span{font-size:11px;padding:6px 11px;border-radius:8px;background:#0A2028;border:1px solid var(--line2);color:var(--cyn)}
+.chain em{color:var(--grn-d);font-style:normal}
+.sdr h3{font-family:var(--disp);font-size:15.5px;color:#EAFBF1}
+.sdr .band{font-family:var(--mono);font-size:10px;color:var(--amb);letter-spacing:1px;margin-top:2px}
+.sdr p{font-size:12px;color:var(--mut);line-height:1.8;margin:9px 0 12px}
+.fx{display:inline-block;font-size:9px;font-family:var(--mono);letter-spacing:1px;color:#04110A;background:var(--grn);border-radius:9px;padding:2px 8px;vertical-align:middle;margin-inline-start:6px}
+.freqs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.fq{border:1px solid var(--line);border-radius:10px;background:#08141A;padding:10px 12px}
+.fq b{font-family:var(--mono);font-weight:400;color:var(--grn);font-size:13px;display:block}
+.fq span{font-size:10.5px;color:var(--mut)}
+
+nav#tabbar{position:fixed;bottom:0;left:0;right:0;z-index:60;display:flex;
+  background:rgba(7,14,18,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+.tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0 3px;background:none;border:none;
+  color:#57767A;font-family:var(--body);font-size:10px;cursor:pointer;transition:color .2s}
+.tb svg{transition:transform .2s}
+.tb.active{color:var(--grn)}
+.tb.active svg{transform:translateY(-2px);filter:drop-shadow(0 0 6px rgba(83,242,142,.6))}
+.tb:active svg{transform:scale(.88)}
+</style>
+</head>
+<body>
+
+<!-- شاشة تفعيل مستشعرات الآيفون -->
+<div id="gate">
+  <div class="g-logo">سبكترا‑٧</div>
+  <div class="g-sub">معترض الإشارات · <b>نسخة آيفون</b> · بيانات حقيقية 100%</div>
+  <button id="gBtn" aria-label="تفعيل"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#53F28E" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v8"/><path d="M6.3 6.5a8 8 0 1 0 11.4 0"/></svg></button>
+  <div id="gList">
+    <div class="g-row" id="gr-audio"><span>المحرك الصوتي — نواة التحليل الطيفي</span><i>…</i></div>
+    <div class="g-row" id="gr-motion"><span>مقياس التسارع + الجيروسكوب</span><i>…</i></div>
+    <div class="g-row" id="gr-ori"><span>البوصلة المغناطيسية</span><i>…</i></div>
+    <div class="g-row" id="gr-net"><span>الاتصال بالإنترنت</span><i>…</i></div>
+  </div>
+  <p class="g-note">اضغط الزر وسيطلب الآيفون إذن المستشعرات — هذه خطوة أمنية من Apple، وكل ما ستلتقطه بعدها حقيقي من عتاد جهازك فعلياً.</p>
+</div>
+
+<header>
+  <div class="hbrand">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path d="M4 22 Q9 8 16 16 Q23 24 28 9" stroke="#53F28E" stroke-width="2.4" stroke-linecap="round"/></svg>
+    <div><b>SPECTRA‑7</b><small>IPHONE EDITION · RX</small></div>
+  </div>
+  <div class="leds">
+    <span class="led" id="ledMic"><i></i>MIC</span>
+    <span class="led" id="ledMot"><i></i>MOT</span>
+    <span class="led" id="ledNet"><i></i>NET</span>
+  </div>
+  <div class="clock"><span id="clock">--:--:--</span><small>UTC</small></div>
+</header>
+
+<main>
+<!-- ═══ ١) محلل الطيف الصوتي ═══ -->
+<section id="m-mic" class="active">
+  <div class="ph"><h2>محلل الطيف الصوتي<em>التقاط حقيقي من ميكروفون الآيفون</em></h2><span class="chipst" id="micChip">جاهز</span></div>
+  <div class="scope">
+    <canvas id="spec"></canvas>
+    <div class="hud"><div class="fb" id="hudF">— Hz</div><div class="fs">أقوى إشارة مرصودة</div><div class="fd" id="hudDb"></div></div>
+    <div class="overlay" id="micOv">
+      <button class="roundbtn" id="btnMic">بدء الالتقاط</button>
+      <p>سيسمح الآيفون للموقع باستخدام الميكروفون — كل ما سيُعرض هو الطيف الفعلي للموجات حولك، وليس محاكاة.</p>
+      <div id="micMsg"></div>
+    </div>
+  </div>
+  <div class="fall"><canvas id="fall"></canvas><span>WATERFALL</span></div>
+  <div class="card" style="margin-top:14px">
+    <div class="meter"><div class="bar"><div class="fill" id="smFill"></div></div>
+      <div class="lbl"><span>-70dB</span><span id="smVal">S-METER</span><span>0dB</span></div></div>
+    <div class="reads">
+      <span>العينات <b id="rSR">—</b></span><span>نايكويست <b id="rNQ">—</b></span><span>FFT <b>8192</b></span>
+    </div>
+    <div class="ctrl"><label>التضخيم <b id="gV">1.0×</b></label><input type="range" id="gainR" min="0.2" max="5" step="0.1" value="1"></div>
+    <div class="ctrl"><label>عتبة الرصد <b id="thV">-55dB</b></label><input type="range" id="thR" min="-95" max="-30" step="1" value="-55"></div>
+    <div class="tgrow">
+      <label class="tgl"><input type="checkbox" id="monCk"> بث حي لما يُلتقط 🔊</label>
+      <input type="range" id="monV" min="0" max="1" step="0.05" value="0.4" style="flex:1;min-width:90px" disabled>
+    </div>
+    <div class="btnrow">
+      <button class="btn" id="recBtn" disabled>⏺ تسجيل</button>
+      <button class="btn red" id="stopBtn" disabled>■ إيقاف</button>
+    </div>
+  </div>
+  <div style="font-size:12px;color:var(--mut)">⚡ الإشارات المكتشفة — المس أي تردد لتثبيت مؤشره:</div>
+  <div class="chips" id="peaks"><span style="color:var(--mut);font-size:12px">لا التقاط بعد…</span></div>
+  <p class="note" style="margin-top:12px">جرّب قرب شاحن أو سماعة: الميكروفون يلتقط طنينها الحقيقي كإشارات منخفضة التردد. المس شاشة الطيف لتثبيت مؤشر على أي تردد.</p>
+</section>
+
+<!-- ═══ ٢) مستشعر الاهتزاز ═══ -->
+<section id="m-mot">
+  <div class="ph"><h2>راسم الاهتزازات<em>مقياس التسارع والجيروسكوب — FFT حقيقي</em></h2><span class="chipst" id="motChip">بانتظار التفعيل</span></div>
+  <div class="bigfreq"><div class="v" id="motF">— Hz</div><div class="c" id="motCls">بانتظار البيانات…</div><div class="t">التردد الغالب في الاهتزازات المحيطة بجهازك</div></div>
+  <div class="card" style="padding:10px"><canvas id="seis" style="width:100%;height:120px;display:block"></canvas></div>
+  <div class="card" style="padding:10px"><canvas id="mspec" style="width:100%;height:150px;display:block"></canvas></div>
+  <div class="card">
+    <div class="meter"><div class="bar"><div class="fill" id="motFill"></div></div>
+      <div class="lbl"><span>ساكن</span><span id="motInt">شدة الاهتزاز</span><span>قوي</span></div></div>
+  </div>
+  <p class="note"><b>تجربة أسطورية:</b> ضع الآيفون على طاولة بجانب سماعة تشغّل موسيقى، أو على غسالة تعمل — سيلتقط المستشعر الاهتزازات الميكانيكية الحقيقية ويحلل تردداتها فعلياً (حتى 30 هرتز).</p>
+</section>
+
+<!-- ═══ ٣) البوصلة المغناطيسية ═══ -->
+<section id="m-cmp">
+  <div class="ph"><h2>البوصلة والمجال المغناطيسي<em>المغنطيس الحقيقي داخل الآيفون</em></h2><span class="chipst" id="cmpChip">بانتظار التفعيل</span></div>
+  <div class="card">
+    <div class="dialwrap"><canvas id="dial" style="width:290px;height:290px"></canvas></div>
+    <div class="headwrap"><div class="h"><span id="hdV">—</span><small>°</small></div><div class="d" id="hdDir">—</div></div>
+  </div>
+  <div class="card">
+    <div style="font-size:13px;color:var(--mut);margin-bottom:6px">ميزان استواء الجهاز (من الجيروسكوب):</div>
+    <div class="lvrow">
+      <canvas id="bub" style="width:150px;height:150px"></canvas>
+      <div class="lvlab">ميل جانبي<b id="gmm">—</b>ميل أمامي<b id="bta">—</b>الاستواء: <b id="lvl">—</b></div>
+    </div>
+  </div>
+  <div class="card">
+    <div style="font-size:13px;color:var(--mut);margin-bottom:10px">معلومات عتاد جهازك (حقيقية من النظام):</div>
+    <dl class="infogrid">
+      <div class="info"><dt>النظام</dt><dd id="iPlat">—</dd></div>
+      <div class="info"><dt>أنوية المعالج</dt><dd id="iCores">—</dd></div>
+      <div class="info"><dt>كثافة الشاشة</dt><dd id="iDpr">—</dd></div>
+      <div class="info"><dt>معدل مستشعر الحركة</dt><dd id="iSr">—</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ═══ ٤) الإذاعات الحية ═══ -->
+<section id="m-rad">
+  <div class="ph"><h2>إذاعات العالم الحية<em>بث حقيقي مباشر عبر الإنترنت</em></h2><span class="chipst" id="rbChip">متصل</span></div>
+  <div class="searchrow">
+    <input type="text" id="rbQ" placeholder="ابحث عن محطة…">
+    <button class="iconb" id="rbGo">🔍</button>
+    <button class="iconb" id="nearBtn" title="محطات قريبة">📍</button>
+    <button class="iconb" id="spdBtn" title="قياس سرعة الخط">⚡</button>
+  </div>
+  <div class="tagrow" id="tags"></div>
+  <div class="card speedbox" id="spdBox">
+    <div class="r" id="spdTxt">قياس فعلي لسرعة خط اتصالك…</div>
+    <div class="s" id="spdNote"></div>
+  </div>
+  <div id="stGrid"><span style="color:var(--mut);font-size:13px">جارٍ جلب المحطات الحقيقية…</span></div>
+  <div class="player" id="player">
+    <div style="width:40px;height:40px;flex:none;border-radius:10px;background:#0A222B;display:grid;place-items:center;font-size:19px">📻</div>
+    <div class="now"><b id="npN">—</b><span id="npM">—</span></div>
+    <span class="liveb" id="npL" style="display:none"><i></i>LIVE</span>
+    <input type="range" id="volR" min="0" max="1" step="0.05" value="0.8">
+    <button class="iconb" id="npStop" style="width:40px;height:40px">■</button>
+  </div>
+  <p class="note">📍 = محطات حقيقية قرب موقعك · ⚡ = قياس سرعة خطك الفعلي عبر تنزيل حقيقي. المصدر: قاعدة Radio‑Browser المفتوحة (50+ ألف محطة).</p>
+</section>
+
+<!-- ═══ ٥) مستقبلات SDR العالمية ═══ -->
+<section id="m-sdr">
+  <div class="ph"><h2>مستقبلات الراديو الحقيقية<em>هوائيات مادية حول العالم تلتقط لك الموجات</em></h2></div>
+  <div class="chain"><span>📶 هوائي حقيقي</span><em>←</em><span>مضخم RF</span><em>←</em><span>ADC</span><em>←</em><span>معالجة رقمية</span><em>←</em><span>بث عبر الإنترنت</span><em>←</em><span style="border-color:var(--grn);color:var(--grn)">سبكترا‑٧ 🎧</span></div>
+  <div class="card sdr"><h3>دليل KiwiSDR العالمي<span class="fx">إشارة حية</span></h3><div class="band">0 kHz → 30 MHz · موجات قصيرة</div><p>أكبر شبكة مستقبلات حقيقية في العالم: اختر أي مدينة وتحكم بالتردد مباشرة وسترى الطيف حياً.</p><a class="btn prime wide" target="_blank" rel="noopener" href="https://kiwisdr.com/public/">فتح الدليل ↗</a></div>
+  <div class="card sdr"><h3>شبكة WebSDR<span class="fx">إشارة حية</span></h3><div class="band">HF + VHF</div><p>أعرق شبكة استقبال جماعي منذ 2007 — مستقبلات حقيقية يديرها متطوعون حول العالم.</p><a class="btn prime wide" target="_blank" rel="noopener" href="http://websdr.org/">فتح الشبكة ↗</a></div>
+  <div class="card sdr"><h3>LiveATC — أبراج الطيران الحقيقية<span class="fx">بث حي</span></h3><div class="band">118 → 137 MHz VHF</div><p>اتصالات أبراج المراقبة الجوية الحية: JFK وHeathrow ودبي — صوت الراديو الجوي الخام لحظياً.</p><a class="btn prime wide" target="_blank" rel="noopener" href="https://www.liveatc.net/">فتح البث ↗</a></div>
+  <div class="card sdr"><h3>Radio Garden<span class="fx">بث حي</span></h3><div class="band">FM عالمي</div><p>أدر الكرة الأرضية والمس أي مدينة لتسمع إذاعتها المحلية الحقيقية في تلك اللحظة.</p><a class="btn prime wide" target="_blank" rel="noopener" href="https://radio.garden/">فتح الخريطة ↗</a></div>
+  <div style="font-size:13.5px;margin:18px 0 10px;color:#EAFBF1;font-family:var(--disp)">🎯 ترددات شهيرة اضبط المستقبلات عليها:</div>
+  <div class="freqs">
+    <div class="fq"><b>121.500 MHz</b><span>طوارئ الطيران الدولي</span></div>
+    <div class="fq"><b>145.800 MHz</b><span>محطة الفضاء الدولية</span></div>
+    <div class="fq"><b>156.800 MHz</b><span>استغاثة بحرية — قناة 16</span></div>
+    <div class="fq"><b>88–108 MHz</b><span>نطاق البث FM</span></div>
+  </div>
+  <p class="note" style="margin-top:14px">ملاحظة صادقة: متصفح آيفون (قيود Apple) لا يتيح البلوتوث الخام أو الراديو الداخلي — لذلك كل التقاط الراديو الحقيقي يتم عبر مستقبلات خارجية حقيقية تبث لك، ومستشعرات الآيفون نفسها تعمل في الوحدات الأخرى.</p>
+</section>
+</main>
+
+<nav id="tabbar">
+  <button class="tb active" data-m="mic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h3l2-7 3 14 3-10 2 5h4"/></svg>الطيف</button>
+  <button class="tb" data-m="mot"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="3" width="8" height="18" rx="2"/><path d="M12 18h.01"/></svg>الاهتزاز</button>
+  <button class="tb" data-m="cmp"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2 5-4 1 2-5z"/></svg>البوصلة</button>
+  <button class="tb" data-m="rad"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="14" r="2"/><path d="M8.5 10.5a5 5 0 0 1 7 0M5.6 7.6a9 9 0 0 1 12.8 0M12 16v6"/></svg>الراديو</button>
+  <button class="tb" data-m="sdr"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v9m0 0l-4 9m4-9l4 9M4 6l8 3 8-3"/></svg>SDR</button>
+</nav>
+
+<script>
+'use strict';
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const DPR=Math.min(devicePixelRatio||1,2), fmt2=n=>String(n).padStart(2,'0');
+let curTab='mic', actx=null, uiOK=false;
+function blip(f=880){ if(!actx)return; try{const o=actx.createOscillator(),g=actx.createGain();
+  o.frequency.value=f; g.gain.setValueAtTime(.04,actx.currentTime);
+  g.gain.exponentialRampToValueAtTime(.0001,actx.currentTime+.08);
+  o.connect(g).connect(actx.destination); o.start(); o.stop(actx.currentTime+.09);}catch(e){} }
+setInterval(()=>{const d=new Date();$('#clock').textContent=`${fmt2(d.getUTCHours())}:${fmt2(d.getUTCMinutes())}:${fmt2(d.getUTCSeconds())}`;},1000);
+function setNet(){$('#ledNet').className='led '+(navigator.onLine?'on':'rd');}
+setNet();addEventListener('online',setNet);addEventListener('offline',setNet);
+
+/* ═══ شاشة التفعيل: طلب أذونات آيفون الحقيقية ═══ */
+let motionOK=false, oriOK=false, heading=0, beta=0, gamma=0, hHist=[];
+const setG=(id,st)=>{const el=$(id);el.classList.add(st);el.querySelector('i').textContent=st==='ok'?'✓':'✗';};
+$('#gBtn').onclick=async()=>{
+  try{actx=new (window.AudioContext||window.webkitAudioContext)();await actx.resume();uiOK=true;setG('#gr-audio','ok');}catch(e){setG('#gr-audio','no');}
+  try{
+    if(typeof DeviceMotionEvent!=='undefined'&&typeof DeviceMotionEvent.requestPermission==='function'){
+      const r=await DeviceMotionEvent.requestPermission();
+      if(r==='granted'){motionOK=true;addEventListener('devicemotion',onMotion);} setG('#gr-motion',r==='granted'?'ok':'no');
+    }else{motionOK=true;addEventListener('devicemotion',onMotion);setG('#gr-motion','ok');}
+  }catch(e){setG('#gr-motion','no');}
+  try{
+    if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
+      const r=await DeviceOrientationEvent.requestPermission();
+      if(r==='granted'){oriOK=true;addEventListener('deviceorientation',onOri);} setG('#gr-ori',r==='granted'?'ok':'no');
+    }else{oriOK=true;addEventListener('deviceorientation',onOri);setG('#gr-ori','ok');}
+  }catch(e){setG('#gr-ori','no');}
+  setG('#gr-net',navigator.onLine?'ok':'no');
+  $('#ledMot').className='led '+(motionOK?'on cy':'');
+  $('#motChip').textContent=motionOK?'● رصد حي':'غير مصرّح';
+  $('#motChip').className='chipst '+(motionOK?'live':'err');
+  $('#cmpChip').textContent=oriOK?'● فعّالة':'غير مصرّح';
+  $('#cmpChip').className='chipst '+(oriOK?'live':'err');
+  $('#iPlat').textContent=navigator.platform||'—';
+  $('#iCores').textContent=navigator.hardwareConcurrency||'—';
+  $('#iDpr').textContent=(devicePixelRatio||1)+'x';
+  setTimeout(()=>{const g=$('#gate');g.style.opacity='0';setTimeout(()=>g.remove(),600);blip(980);},700);
+};
+
+/* ═══ التبويبات ═══ */
+$$('.tb').forEach(b=>b.onclick=()=>{
+  $$('.tb').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  $$('main section').forEach(s=>s.classList.remove('active'));
+  curTab=b.dataset.m;$('#m-'+curTab).classList.add('active');blip(760);
+  requestAnimationFrame(fitAll);
+});
+
+/* ═══ 1) الميكروفون ═══ */
+let analyser=null,micStream=null,preGain=null,monGain=null,dataF=null,dataT=null,hold=[],rafOn=false,nyq=24000,marker=null,FMIN=25,FMAX=20000,recorder=null,recChunks=[],recTmr=null,recT0=0;
+const specCv=$('#spec'),fallCv=$('#fall'),sctx=specCv.getContext('2d'),fctx=fallCv.getContext('2d');
+const rowCv=document.createElement('canvas'),rctx=rowCv.getContext('2d');
+function fitC(cv){const r=cv.getBoundingClientRect();if(!r.width)return;
+  cv.width=r.width*DPR;cv.height=r.height*DPR;
+  if(cv===specCv){hold=new Array(Math.ceil(r.width)).fill(0);}
+  if(cv===rowCv){}}
+function fitAll(){fitC(specCv);fitC(fallCv);rowCv.width=Math.min(fallCv.getBoundingClientRect().width*DPR,800);rowCv.height=1;
+  ['#seis','#mspec','#dial','#bub'].forEach(s=>fitC($(s)));}
+addEventListener('resize',fitAll);addEventListener('orientationchange',()=>setTimeout(fitAll,300));
+const xToF=(x,w)=>FMIN*Math.pow(FMAX/FMIN,x/w), fToX=(f,w)=>w*Math.log(f/FMIN)/Math.log(FMAX/FMIN);
+const fmtF=f=>f<1000?f.toFixed(f<100?1:0)+' Hz':(f/1000).toFixed(f<10000?2:1)+' kHz';
+const toDb=v=>(-105+(v/255)*80).toFixed(1);
+const LUT=(()=>{const s=[[0,2,8,12],[.22,10,60,46],[.45,37,208,122],[.68,255,209,102],[.86,255,92,92],[1,255,255,255]];
+  const a=new Uint8ClampedArray(256*3);
+  for(let i=0;i<256;i++){const t=i/255;let k=0;while(k<s.length-2&&t>s[k+1][0])k++;
+    const[t0,r0,g0,b0]=s[k],[t1,r1,g1,b1]=s[k+1],p=(t-t0)/(t1-t0);
+    a[i*3]=r0+(r1-r0)*p;a[i*3+1]=g0+(g1-g0)*p;a[i*3+2]=b0+(b1-b0)*p;}return a;})();
+$('#btnMic').onclick=async()=>{
+  $('#micMsg').textContent='';
+  try{
+    actx=actx||new (window.AudioContext||window.webkitAudioContext)();await actx.resume();
+    micStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+    const src=actx.createMediaStreamSource(micStream);
+    preGain=actx.createGain();preGain.gain.value=+$('#gainR').value;
+    analyser=actx.createAnalyser();analyser.fftSize=8192;analyser.smoothingTimeConstant=.8;
+    analyser.minDecibels=-105;analyser.maxDecibels=-25;
+    monGain=actx.createGain();monGain.gain.value=$('#monCk').checked?+$('#monV').value:0;
+    src.connect(preGain);preGain.connect(analyser);analyser.connect(monGain);monGain.connect(actx.destination);
+    dataF=new Uint8Array(analyser.frequencyBinCount);dataT=new Float32Array(analyser.fftSize);
+    nyq=actx.sampleRate/2;FMAX=Math.min(nyq*.98,20000);
+    $('#rSR').textContent=actx.sampleRate+' Hz';$('#rNQ').textContent=(nyq/1000).toFixed(1)+' kHz';
+    $('#micOv').style.display='none';$('#stopBtn').disabled=false;$('#recBtn').disabled=false;
+    $('#micChip').textContent='● التقاط حي';$('#micChip').className='chipst live';
+    $('#ledMic').classList.add('on');blip(1020);requestAnimationFrame(loop);
+  }catch(e){$('#micMsg').textContent='⚠ رفض الإذن أو لا يوجد ميكروفون — أعد المحاولة';}
+};
+$('#stopBtn').onclick=()=>{
+  if(micStream){micStream.getTracks().forEach(t=>t.stop());micStream=null;}
+  stopRec();analyser=null;$('#ledMic').classList.remove('on');
+  $('#micOv').style.display='flex';$('#stopBtn').disabled=true;$('#recBtn').disabled=true;
+  $('#micChip').textContent='متوقف';$('#micChip').className='chipst';
+  $('#hudF').textContent='— Hz';$('#hudDb').textContent='';
+  $('#peaks').innerHTML='<span style="color:var(--mut);font-size:12px">توقف الالتقاط</span>';blip(320);
+};
+specCv.addEventListener('pointerdown',e=>{ if(!analyser)return;
+  const r=specCv.getBoundingClientRect();marker=xToF((e.clientX-r.left)/r.width,r.width);blip(600);});
+$('#gainR').oninput=e=>{$('#gV').textContent=(+e.target.value).toFixed(1)+'×';if(preGain)preGain.gain.value=+e.target.value;};
+$('#thR').oninput=e=>{$('#thV').textContent=e.target.value+'dB';};
+$('#monCk').onchange=e=>{$('#monV').disabled=!e.target.checked;if(monGain)monGain.gain.value=e.target.checked?+$('#monV').value:0;};
+$('#monV').oninput=e=>{if(monGain&&$('#monCk').checked)monGain.gain.value=+e.target.value;};
+$('#recBtn').onclick=()=>{
+  if(typeof MediaRecorder==='undefined'||!micStream)return;
+  if(recorder&&recorder.state==='recording'){stopRec();return;}
+  recChunks=[];recorder=new MediaRecorder(micStream);
+  recorder.ondataavailable=e=>recChunks.push(e.data);
+  recorder.onstop=()=>{const b=new Blob(recChunks,{type:recorder.mimeType||'audio/mp4'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(b);
+    a.download='spectra7.'+(b.type.includes('mp4')?'m4a':'webm');a.click();};
+  recorder.start();recT0=Date.now();
+  recTmr=setInterval(()=>{const s=Math.floor((Date.now()-recT0)/1000);
+    $('#recBtn').textContent=`⏺ ${fmt2(Math.floor(s/60))}:${fmt2(s%60)}`;},500);
+  $('#recBtn').classList.add('red');$('#recBtn').textContent='⏺ 00:00';};
+function stopRec(){if(recorder&&recorder.state==='recording')recorder.stop();recorder=null;
+  clearInterval(recTmr);const b=$('#recBtn');b.classList.remove('red');b.textContent='⏺ تسجيل';}
+let lastPk=0,peaksList=[];
+const GRID=[30,50,100,200,500,1000,2000,5000,10000,20000];
+function loop(){
+  requestAnimationFrame(loop);
+  if(analyser&&curTab==='mic')drawMic();
+  if(motionOK&&curTab==='mot')drawMotion();
+  if(oriOK&&curTab==='cmp')drawCompass();
+  if(analyser)doPeaks();
+}
+function drawMic(){
+  analyser.getByteFrequencyData(dataF);
+  const w=specCv.width/DPR,h=specCv.height/DPR;
+  sctx.setTransform(DPR,0,0,DPR,0,0);sctx.clearRect(0,0,w,h);
+  sctx.font='9px "Share Tech Mono"';sctx.textAlign='center';
+  GRID.forEach(f=>{if(f>FMAX)return;const x=fToX(f,w);
+    sctx.strokeStyle='rgba(90,200,170,.1)';sctx.beginPath();sctx.moveTo(x,0);sctx.lineTo(x,h-14);sctx.stroke();
+    sctx.fillStyle='#5E8A87';sctx.fillText(f>=1000?(f/1000)+'k':f,x,h-4);});
+  const N=analyser.frequencyBinCount,ys=new Float32Array(Math.ceil(w));
+  for(let x=0;x<w;x++){const bin=Math.min(N-1,Math.round(xToF(x,w)/nyq*(N-1)));
+    ys[x]=dataF[bin];hold[x]=Math.max(hold[x]*.996,ys[x]);}
+  const g=sctx.createLinearGradient(0,0,w,0);
+  g.addColorStop(0,'#2F9E60');g.addColorStop(.5,'#53F28E');g.addColorStop(1,'#5BD6E8');
+  sctx.beginPath();
+  for(let x=0;x<w;x++){const y=h-14-(ys[x]/255)*(h-14);x?sctx.lineTo(x,y):sctx.moveTo(x,y);}
+  sctx.strokeStyle=g;sctx.lineWidth=1.6;sctx.shadowColor='#53F28E';sctx.shadowBlur=8;sctx.stroke();sctx.shadowBlur=0;
+  sctx.lineTo(w,h);sctx.lineTo(0,h);sctx.closePath();sctx.fillStyle='rgba(83,242,142,.07)';sctx.fill();
+  sctx.beginPath();
+  for(let x=0;x<w;x++){const y=h-14-(hold[x]/255)*(h-14);x?sctx.lineTo(x,y):sctx.moveTo(x,y);}
+  sctx.strokeStyle='rgba(255,180,84,.45)';sctx.lineWidth=1;sctx.stroke();
+  if(marker){const mx=fToX(marker,w);sctx.strokeStyle='#FFB454';sctx.setLineDash([4,4]);
+    sctx.beginPath();sctx.moveTo(mx,0);sctx.lineTo(mx,h-14);sctx.stroke();sctx.setLineDash([]);
+    sctx.fillStyle='#FFB454';sctx.fillText(fmtF(marker),Math.max(26,Math.min(w-26,mx)),12);}
+  peaksList.forEach(p=>{sctx.beginPath();sctx.arc(fToX(p.f,w),h-14-(p.v/255)*(h-14),3,0,7);sctx.fillStyle='#FFB454';sctx.fill();});
+  analyser.getFloatTimeDomainData(dataT);let sum=0;
+  for(let i=0;i<dataT.length;i+=8)sum+=dataT[i]*dataT[i];
+  const db=20*Math.log10(Math.sqrt(sum/(dataT.length/8))+1e-8);
+  $('#smFill').style.width=Math.max(0,Math.min(100,(db+70)/70*100))+'%';
+  $('#smVal').textContent=db.toFixed(1)+' dBFS';
+  const fw=fallCv.width,fh=fallCv.height;
+  fctx.drawImage(fallCv,0,0,fw,fh-2,0,2,fw,fh-2);
+  const img=rctx.createImageData(rowCv.width,1),d=img.data;
+  for(let x=0;x<rowCv.width;x++){const bin=Math.min(N-1,Math.round(xToF(x/rowCv.width,1)/nyq*(N-1)));
+    const v=dataF[bin];d[x*4]=LUT[v*3];d[x*4+1]=LUT[v*3+1];d[x*4+2]=LUT[v*3+2];d[x*4+3]=255;}
+  rctx.putImageData(img,0,0);fctx.drawImage(rowCv,0,0,fw,2);
+}
+function doPeaks(){
+  const now=performance.now();if(now-lastPk<600)return;lastPk=now;
+  const N=analyser.frequencyBinCount,thr=(+$('#thR').value+105)/80*255,found=[];
+  for(let b=Math.round(FMIN/nyq*N);b<N-4;b++){const v=dataF[b];
+    if(v>thr&&v>=dataF[b-1]&&v>=dataF[b+1]&&v>dataF[b-2]&&v>dataF[b+2]){found.push({f:b*nyq/N,v});b+=3;}}
+  found.sort((a,b)=>b.v-a.v);peaksList=[];
+  for(const p of found){if(peaksList.every(q=>Math.abs(q.f-p.f)>Math.max(80,p.f*.02)))peaksList.push(p);if(peaksList.length>=6)break;}
+  peaksList.sort((a,b)=>a.f-b.f);
+  const box=$('#peaks');
+  if(!peaksList.length){box.innerHTML='<span style="color:var(--mut);font-size:12px">لا إشارات فوق العتبة — اخفضها أو ارفع التضخيم</span>';
+    $('#hudF').textContent='— Hz';$('#hudDb').textContent='';return;}
+  box.innerHTML='';
+  peaksList.forEach(p=>{const c=document.createElement('span');c.className='chip';
+    c.innerHTML=`${fmtF(p.f)} <span class="db">${toDb(p.v)}dB</span>`;
+    c.onclick=()=>{marker=p.f;blip(600);};box.appendChild(c);});
+  const top=peaksList.reduce((a,b)=>a.v>b.v?a:b);
+  $('#hudF').textContent=fmtF(top.f);$('#hudDb').textContent=toDb(top.v)+' dB';
+}
+
+/* ═══ 2) الاهتزاز: FFT حقيقي على مقياس التسارع ═══ */
+function fft(re,im){const n=re.length;
+  for(let i=1,j=0;i<n;i++){let bit=n>>1;for(;j&bit;bit>>=1)j^=bit;j^=bit;
+    if(i<j){[re[i],re[j]]=[re[j],re[i]];[im[i],im[j]]=[im[j],im[i]];}}
+  for(let len=2;len<=n;len<<=1){const a=-2*Math.PI/len,wr=Math.cos(a),wi=Math.sin(a);
+    for(let i=0;i<n;i+=len){let cr=1,ci=0;
+      for(let j=0;j<len/2;j++){const ur=re[i+j],ui=im[i+j],
+        vr=re[i+j+len/2]*cr-im[i+j+len/2]*ci,vi=re[i+j+len/2]*ci+im[i+j+len/2]*cr;
+        re[i+j]=ur+vr;im[i+j]=ui+vi;re[i+j+len/2]=ur-vr;im[i+j+len/2]=ui-vi;
+        const nr=cr*wr-ci*wi;ci=cr*wi+ci*wr;cr=nr;}}}}
+let mBuf=[],mTrace=[],mSR=60,lastMT=0,mSpec=null,mEvtCnt=0,mEvtT=performance.now();
+function onMotion(e){
+  const a=(e.acceleration&&e.acceleration.x!==null)?e.acceleration:e.accelerationIncludingGravity;
+  if(!a||a.x===null)return;
+  const m=Math.sqrt(a.x*a.x+a.y*a.y+a.z*a.z),t=performance.now();
+  if(lastMT){const dt=t-lastMT;if(dt>0&&dt<200)mSR=mSR*.9+(1000/dt)*.1;}
+  lastMT=t;mBuf.push(m);if(mBuf.length>2048)mBuf.splice(0,1024);
+  mTrace.push(m);if(mTrace.length>420)mTrace.shift();
+  mEvtCnt++;
+  if(t-mEvtT>1000){$('#iSr').textContent=mEvtCnt+' هرتز';mEvtCnt=0;mEvtT=t;}
+}
+let lastFFT=0;
+function drawMotion(){
+  const t=performance.now();
+  if(t-lastFFT>110&&mBuf.length>=512){
+    lastFFT=t;const n=512,re=new Float64Array(n),im=new Float64Array(n);
+    const seg=mBuf.slice(-n);let mean=0;for(const v of seg)mean+=v;mean/=n;
+    for(let i=0;i<n;i++){const w=.5-.5*Math.cos(2*Math.PI*i/(n-1));re[i]=(seg[i]-mean)*w;}
+    fft(re,im);
+    mSpec=new Float64Array(n/2);
+    for(let i=1;i<n/2;i++)mSpec[i]=Math.sqrt(re[i]*re[i]+im[i]*im[i]);
+  }
+  /* راسم الزلازل */
+  const cv=$('#seis'),x=cv.getContext('2d'),w=cv.width/DPR,h=cv.height/DPR;
+  x.setTransform(DPR,0,0,DPR,0,0);x.clearRect(0,0,w,h);
+  x.strokeStyle='rgba(90,200,170,.12)';
+  for(let gy=0;gy<h;gy+=h/4){x.beginPath();x.moveTo(0,gy);x.lineTo(w,gy);x.stroke();}
+  if(mTrace.length>2){let mn=1e9,mx=-1e9;for(const v of mTrace){if(v<mn)mn=v;if(v>mx)mx=v;}
+    const rng=Math.max(mx-mn,.02);
+    x.beginPath();
+    mTrace.forEach((v,i)=>{const px=i/(mTrace.length-1)*w,py=h-8-((v-mn)/rng)*(h-16);
+      i?x.lineTo(px,py):x.moveTo(px,py);});
+    x.strokeStyle='#53F28E';x.lineWidth=1.4;x.shadowColor='#53F28E';x.shadowBlur=6;x.stroke();x.shadowBlur=0;}
+  /* طيف الاهتزاز */
+  const cv2=$('#mspec'),x2=cv2.getContext('2d'),w2=cv2.width/DPR,h2=cv2.height/DPR;
+  x2.setTransform(DPR,0,0,DPR,0,0);x2.clearRect(0,0,w2,h2);
+  x2.font='9px "Share Tech Mono"';x2.textAlign='center';
+  const maxHz=Math.min(30,mSR/2),bpw=w2/24;
+  for(let f=5;f<maxHz;f+=5){const px=f/maxHz*w2;
+    x2.strokeStyle='rgba(90,200,170,.1)';x2.beginPath();x2.moveTo(px,0);x2.lineTo(px,h2-13);x2.stroke();
+    x2.fillStyle='#5E8A87';x2.fillText(f+'Hz',px,h2-3);}
+  if(mSpec){let maxV=0;for(let i=1;i<mSpec.length;i++)if(mSpec[i]>maxV)maxV=mSpec[i];
+    maxV=Math.max(maxV,.001);
+    x2.beginPath();
+    for(let px=0;px<w2;px+=2){const f=px/w2*maxHz,bin=Math.round(f/(mSR/512));
+      if(bin<1||bin>=mSpec.length)continue;
+      const y=h2-14-(mSpec[bin]/maxV)*(h2-20);px?x2.lineTo(px,y):x2.moveTo(px,y);}
+    x2.strokeStyle='#5BD6E8';x2.lineWidth=1.6;x2.shadowColor='#5BD6E8';x2.shadowBlur=7;x2.stroke();x2.shadowBlur=0;
+    x2.lineTo(w2,h2-14);x2.lineTo(0,h2-14);x2.closePath();x2.fillStyle='rgba(91,214,232,.08)';x2.fill();
+    /* قمة غالبة */
+    let pb=1,pv=0;
+    for(let i=Math.max(1,Math.round(.4/(mSR/512)));i<Math.min(mSpec.length,Math.round(maxHz/(mSR/512)));i++)
+      if(mSpec[i]>pv){pv=mSpec[i];pb=i;}
+    const pf=pb*(mSR/512),std=dev(mBuf.slice(-120));
+    $('#motF').textContent=pf.toFixed(1)+' Hz';
+    $('#motCls').textContent=pf<1?'موجات بطيئة جداً — حركة/خطوات':pf<4?'اهتزاز ميكانيكي منخفض':pf<12?'اهتزاز صوتي/محركات':'اهتزاز عالي التردد';
+    const gi=std/9.81,pct=Math.min(100,gi/.15*100);
+    $('#motFill').style.width=pct+'%';
+    $('#motInt').textContent=(gi*1000).toFixed(0)+' mg — '+(gi<.005?'ساكن تقريباً':gi<.02?'اهتزاز خفيف':gi<.06?'اهتزاز واضح':'اهتزاز قوي!');
+  }
+}
+function dev(a){if(!a.length)return 0;let m=0;for(const v of a)m+=v;m/=a.length;
+  let s=0;for(const v of a)s+=(v-m)*(v-m);return Math.sqrt(s/a.length);}
+
+/* ═══ 3) البوصلة ═══ */
+const DIRS=['الشمال','الشمال الشرقي','الشرق','الجنوب الشرقي','الجنوب','الجنوب الغربي','الغرب','الشمال الغربي'];
+function onOri(e){
+  const h=(e.webkitCompassHeading!=null&&!isNaN(e.webkitCompassHeading))?e.webkitCompassHeading:(e.alpha!=null?(360-e.alpha):0);
+  heading=h;beta=e.beta||0;gamma=e.gamma||0;
+  hHist.push(h*Math.PI/180);if(hHist.length>60)hHist.shift();
+}
+function drawCompass(){
+  /* القرص */
+  const cv=$('#dial'),x=cv.getContext('2d'),w=cv.width/DPR,h=cv.height/DPR;
+  x.setTransform(DPR,0,0,DPR,0,0);x.clearRect(0,0,w,h);
+  const cx=w/2,cy=h/2,R=Math.min(w,h)/2-12;
+  x.strokeStyle='#1C3A42';x.lineWidth=2;x.beginPath();x.arc(cx,cy,R,0,7);x.stroke();
+  x.save();x.translate(cx,cy);x.rotate(-heading*Math.PI/180);
+  for(let a=0;a<360;a+=15){const len=a%90===0?15:a%45===0?10:6,rd=Math.PI/180*a;
+    x.strokeStyle=a%90===0?'#5BD6E8':'#2A5560';x.lineWidth=a%90===0?2:1;
+    x.beginPath();
+    x.moveTo(Math.sin(rd)*(R-3),-Math.cos(rd)*(R-3));
+    x.lineTo(Math.sin(rd)*(R-3-len),-Math.cos(rd)*(R-3-len));x.stroke();}
+  x.font='17px Changa';x.textAlign='center';x.textBaseline='middle';
+  [['ش',0,'#53F28E'],['ق',90,'#D9E9E5'],['ج',180,'#D9E9E5'],['غ',270,'#D9E9E5']].forEach(([L,a,c])=>{
+    const rd=Math.PI/180*a;x.fillStyle=c;x.fillText(L,Math.sin(rd)*(R-34),-Math.cos(rd)*(R-34));});
+  x.restore();
+  x.beginPath();x.moveTo(cx,cy-R+4);x.lineTo(cx-8,cy-R+22);x.lineTo(cx+8,cy-R+22);x.closePath();
+  x.fillStyle='#FF5C5C';x.shadowColor='#FF5C5C';x.shadowBlur=10;x.fill();x.shadowBlur=0;
+  x.beginPath();x.arc(cx,cy,5,0,7);x.fillStyle='#53F28E';x.fill();
+  /* القراءة */
+  $('#hdV').textContent=Math.round(heading)%360;
+  $('#hdDir').textContent=DIRS[Math.round(heading/45)%8]+' · اتجاه حقيقي من المغنطيس';
+  /* الاستواء */
+  const cv2=$('#bub'),x2=cv2.getContext('2d'),w2=cv2.width/DPR,h2=cv2.height/DPR;
+  x2.setTransform(DPR,0,0,DPR,0,0);x2.clearRect(0,0,w2,h2);
+  const cx2=w2/2,cy2=h2/2,R2=Math.min(w2,h2)/2-8;
+  x2.strokeStyle='#1C3A42';x2.lineWidth=1.5;x2.beginPath();x2.arc(cx2,cy2,R2,0,7);x2.stroke();
+  x2.strokeStyle='#15303A';x2.beginPath();x2.arc(cx2,cy2,R2*.55,0,7);x2.stroke();
+  x2.beginPath();x2.moveTo(cx2-R2,cy2);x2.lineTo(cx2+R2,cy2);x2.moveTo(cx2,cy2-R2);x2.lineTo(cx2,cy2+R2);x2.stroke();
+  const bx=Math.max(-1,Math.min(1,gamma/30))*R2*.85,by=Math.max(-1,Math.min(1,beta/30))*R2*.85;
+  const flat=Math.abs(beta)<2&&Math.abs(gamma)<2;
+  x2.beginPath();x2.arc(cx2+bx,cy2+by,9,0,7);
+  x2.fillStyle=flat?'#53F28E':'#FFB454';x2.shadowColor=x2.fillStyle;x2.shadowBlur=12;x2.fill();x2.shadowBlur=0;
+  $('#gmm').textContent=gamma.toFixed(1)+'°';$('#bta').textContent=beta.toFixed(1)+'°';
+  $('#lvl').textContent=flat?'مستوٍ تماماً ✓':'مائل';
+}
+
+/* ═══ 4) الإذاعات الحية + سرعة الخط + الموقع ═══ */
+const RB=['https://de1.api.radio-browser.info','https://fi1.api.radio-browser.info','https://nl1.api.radio-browser.info'];
+let rbHost=RB[0],radioLoaded=false;
+const audio=new Audio();audio.volume=.8;audio.preload='none';
+const flag=cc=>cc?[...cc.toUpperCase()].map(c=>String.fromCodePoint(127397+c.charCodeAt(0))).join(''):'';
+const esc=s=>(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+async function rbFetch(p){let err;for(const h of[rbHost,...RB.filter(x=>x!==rbHost)]){
+  try{const r=await fetch(h+p);if(r.ok){rbHost=h;return await r.json();}}catch(e){err=e;}}throw err||new Error('net');}
+async function loadStations(params){
+  const grid=$('#stGrid');grid.innerHTML='<span style="color:var(--mut);font-size:13px">جارٍ جلب المحطات الحقيقية…</span>';
+  const q=new URLSearchParams({limit:'20',hidebroken:'true',...(params||{order:'clickcount',reverse:'true'})}).toString();
+  try{const list=await rbFetch('/json/stations/search?'+q);
+    if(!list.length){grid.innerHTML='<span style="color:var(--mut)">لا نتائج — جرّب بحثاً آخر</span>';return;}
+    grid.innerHTML='';list.forEach(s=>{
+      const c=document.createElement('div');c.className='card st';
+      c.innerHTML=`<div class="fav">${s.favicon?`<img src="${esc(s.favicon)}" onerror="this.remove()">`:(s.name||'?')[0]}</div>
+        <div style="min-width:0;flex:1"><h3>${esc(s.name)}</h3>
+        <div class="meta">${flag(s.countrycode)} ${esc(s.country||'')} · ${esc(s.codec||'')} ${s.bitrate||''}kbps · ★${s.votes}</div></div>
+        <div class="eq"><i></i><i></i><i></i><i></i></div>`;
+      c.onclick=()=>playSt(s,c);grid.appendChild(c);});
+  }catch(e){grid.innerHTML='<span style="color:var(--red)">تعذر الاتصال — تحقق من الإنترنت</span>';}
+}
+function playSt(s,c){
+  $$('.st').forEach(x=>x.classList.remove('playing'));c.classList.add('playing');
+  audio.src=s.url_resolved||s.url;audio.play().catch(()=>{$('#npM').textContent='تعذر التشغيل — جرّب أخرى';});
+  $('#player').classList.add('show');$('#npN').textContent=s.name;
+  $('#npM').textContent=`${flag(s.countrycode)} ${s.country||''} · ${s.codec||''}`;blip(1040);
+  try{fetch(rbHost+'/json/url/'+s.stationuuid).catch(()=>{});}catch(e){}
+}
+audio.onplaying=()=>{$('#npL').style.display='inline-flex';};
+audio.onwaiting=()=>{$('#npL').style.display='none';};
+audio.onerror=()=>{$('#npL').style.display='none';$('#npM').textContent='انقطع البث';};
+$('#npStop').onclick=()=>{audio.pause();audio.removeAttribute('src');
+  $$('.st').forEach(x=>x.classList.remove('playing'));$('#npL').style.display='none';};
+$('#volR').oninput=e=>audio.volume=+e.target.value;
+$('#rbGo').onclick=()=>{const q=$('#rbQ').value.trim();
+  loadStations(q?{name:q,order:'votes',reverse:'true'}:{order:'clickcount',reverse:'true'});blip(700);};
+$('#rbQ').onkeydown=e=>{if(e.key==='Enter')$('#rbGo').click();};
+const TAGS=[['الأكثر استماعاً',{order:'clickcount',reverse:'true'}],['أخبار',{tag:'news',order:'clickcount',reverse:'true'}],
+ ['قرآن كريم',{tag:'quran',order:'clickcount',reverse:'true'}],['إلكترونية',{tag:'electronic',order:'clickcount',reverse:'true'}],
+ ['جاز',{tag:'jazz',order:'clickcount',reverse:'true'}],['كلاسيك',{tag:'classical',order:'clickcount',reverse:'true'}]];
+TAGS.forEach((t,i)=>{const b=document.createElement('button');b.className='tagc'+(i===0?' active':'');b.textContent=t[0];
+  b.onclick=()=>{$$('.tagc').forEach(x=>x.classList.remove('active'));b.classList.add('active');loadStations(t[1]);blip(680);};
+  $('#tags').appendChild(b);});
+/* قياس سرعة خط الاتصال — تنزيل حقيقي */
+$('#spdBtn').onclick=async()=>{
+  const box=$('#spdBox');box.classList.add('show');$('#spdNote').textContent='';
+  $('#spdTxt').innerHTML='⏱ قياس فعلي: تنزيل بيانات حية الآن…';blip(640);
+  try{
+    const p0=performance.now();await fetch(rbHost+'/json/stats');const ping=Math.round(performance.now()-p0);
+    const top=await rbFetch('/json/stations/topclick/3');
+    let bytes=0,t0=0,ok=false;
+    for(const s of top){ if(!s.url_resolved)continue;
+      try{const ac=new AbortController();const res=await fetch(s.url_resolved,{mode:'no-cors',signal:ac.signal});
+        const rd=res.body.getReader();t0=performance.now();
+        while(performance.now()-t0<4500){const {done,value}=await rd.read();if(done)break;bytes+=value.length;}
+        ac.abort();ok=true;break;}catch(e){} }
+    if(!ok||!bytes){$('#spdTxt').innerHTML='تعذر القياس — جرّب مجدداً';return;}
+    const mbps=bytes*8/((performance.now()-t0)/1000)/1e6;
+    $('#spdTxt').innerHTML=`سرعة خطك الفعلية: <b>${mbps.toFixed(2)} Mbps</b> · استجابة ${ping}ms`;
+    $('#spdNote').textContent=mbps>2?'ممتاز — يكفي لبث عشرات المحطات عالية الجودة معاً.':mbps>.3?'جيد للبث القياسي، قد يتقطع العالي الجودة.':'ضعيف — توقّع تقطيعاً في البث.';
+  }catch(e){$('#spdTxt').innerHTML='تعذر القياس — تحقق من الإنترنت';}
+};
+/* محطات قريبة من موقعك الحقيقي */
+$('#nearBtn').onclick=()=>{
+  if(!navigator.geolocation)return;
+  $('#nearBtn').textContent='⏳';
+  navigator.geolocation.getCurrentPosition(async p=>{
+    try{const {latitude:la,longitude:lo}=p.coords;
+      const r=await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${la}&longitude=${lo}&localityLanguage=en`);
+      const j=await r.json();
+      if(j.countryName){$('#rbChip').textContent='محطات: '+j.countryName;
+        loadStations({country:j.countryName,order:'clickcount',reverse:'true'});}
+      else loadStations();
+    }catch(e){loadStations();}
+    $('#nearBtn').textContent='📍';blip(880);
+  },e=>{$('#nearBtn').textContent='📍';},{timeout:15000});
+};
+
+/* بدء الحلقة الرئيسية */
+requestAnimationFrame(loop);
+fitAll();
+if(!('ontouchstart' in window)){
+  const n=document.createElement('p');
+  n.style.cssText='text-align:center;font-size:11px;color:#4E6B6B;padding:8px';
+  n.textContent='هذه النسخة مُحسّنة للآيفون — على الحاسوب تعمل الوحدات أيضاً لكن بدون لمسات اللمس.';
+  document.body.appendChild(n);
+}
+</script>
+</body>
+</html>
